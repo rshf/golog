@@ -15,7 +15,7 @@ const (
 	up
 )
 
-var Level level = ALL
+var Level level = INFO
 
 func (l level) String() string {
 	switch l {
