@@ -148,8 +148,8 @@ func Sql(msg ...interface{}) {
 	}
 }
 
-func UpFunc() {
-	control(up, "")
+func UpFunc(msg interface{}) {
+	control(up, msg)
 }
 
 func arrToString(msg ...interface{}) string {

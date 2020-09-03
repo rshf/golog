@@ -124,7 +124,7 @@ func writeToFile(name string, lv level, msg interface{}) {
 	now := time.Now().Format("2006-01-02 15:04:05")
 	if lv == up {
 		c++
-		msg = fmt.Sprintf("caller from %s", printFileline())
+		msg = fmt.Sprintf("caller from %s, msg: %v", printFileline(), msg)
 		c--
 	}
 	var logMsg string
@@ -156,7 +156,7 @@ func writeToFilef(name string, lv level, format string, args ...interface{}) {
 	var logMsg string
 	if lv == up {
 		c++
-		msg = fmt.Sprintf("caller from %s", printFileline())
+		msg = fmt.Sprintf("caller from %s, msg: %v", printFileline(), msg)
 		c--
 	}
 	if lv == SQL {
