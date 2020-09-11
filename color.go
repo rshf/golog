@@ -20,3 +20,9 @@ func SetColor(lv level, attrs []color.Attribute) {
 	logColor[lv] = attrs
 	cmu.Unlock()
 }
+
+func DelColor(lv level, attrs []color.Attribute) {
+	cmu.Lock()
+	delete(logColor, lv)
+	cmu.Unlock()
+}
