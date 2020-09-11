@@ -76,20 +76,7 @@ func writeToFile(name string, lv level, msg interface{}) {
 		msg = fmt.Sprintf("caller from %s, msg: %v", printFileline(int(Up)), msg)
 	}
 	var logMsg string
-	switch lv {
-	case TRACE:
-		logMsg = fmt.Sprintf("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
-	case DEBUG:
-		logMsg = color.GreenString("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
-	case INFO:
-		logMsg = color.BlueString("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
-	case WARN:
-		logMsg = color.YellowString("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
-	case ERROR:
-		logMsg = color.RedString("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
-	case FATAL:
-		logMsg = color.MagentaString("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
-	}
+	color.New(logColor[lv]...).Sprintf("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
 
 	f.Write([]byte(logMsg))
 	f.Close()
@@ -105,21 +92,7 @@ func printLine(lv level, msg interface{}) {
 		msg = fmt.Sprintf("caller from %s -- %v", printFileline(int(Up)), msg)
 		lv = DEBUG
 	}
-	switch lv {
-	case TRACE:
-		fmt.Printf("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
-	case DEBUG:
-		color.Green("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
-	case INFO:
-		color.Blue("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
-	case WARN:
-		color.Yellow("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
-	case ERROR:
-		color.Red("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
-	case FATAL:
-		color.Magenta("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
-	}
-
+	color.New(logColor[lv]...).Printf("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
 }
 
 func printLinef(lv level, format string, args ...interface{}) {
