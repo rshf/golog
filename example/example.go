@@ -42,8 +42,8 @@ func (l level) String() string {
 }
 
 func main() {
-	// golog.InitLogger("log", 0, false)
-	golog.Name = "aaa.log"
+	golog.InitLogger("log", 0, false)
+	golog.Name = "bbbb.log"
 	cmd := fmt.Sprintf(`ruby ruby/addudid.rb "%s" "%s" "%s" "%s" "%s"`, "fgjhgjg", "dosj@#%ASF1", "Seng's Ipad", "aaaa", "3")
 	golog.Info(cmd)
 	golog.Infof("adf%s", "cander")

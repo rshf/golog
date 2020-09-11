@@ -75,8 +75,7 @@ func writeToFile(name string, lv level, msg interface{}) {
 	if lv == Up {
 		msg = fmt.Sprintf("caller from %s, msg: %v", printFileline(int(Up)), msg)
 	}
-	var logMsg string
-	color.New(logColor[lv]...).Sprintf("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
+	logMsg := fmt.Sprintf("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
 
 	f.Write([]byte(logMsg))
 	f.Close()

@@ -13,6 +13,7 @@ func init() {
 	cmu = &sync.RWMutex{}
 	logColor = make(map[level][]color.Attribute)
 	logColor[ERROR] = []color.Attribute{color.FgRed}
+	logColor[WARN] = []color.Attribute{color.FgYellow}
 }
 
 func SetColor(lv level, attrs []color.Attribute) {

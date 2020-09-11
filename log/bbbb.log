@@ -1,0 +1,14 @@
+[m2020-09-11 17:23:03 - [INFO] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:48 - ruby ruby/addudid.rb "fgjhgjg" "dosj@#%ASF1" "Seng's Ipad" "aaaa" "3"
+[0m[m2020-09-11 17:23:03 - [INFO] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:49 - adfcander
+[0m[31m2020-09-11 17:23:03 - [ERROR] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:52 - wo和 
+[0m[m2020-09-11 17:23:03 - [TRACE] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:53 - 7777
+[0m[33m2020-09-11 17:23:03 - [WARN] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:54 - warnning
+[0m[m2020-09-11 17:23:03 - [INFO] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:59 - caller from D:/myproject/golog/example/example.go:59, msg: msg
+[0m[m2020-09-11 17:23:03 - [INFO] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:60 - me
+[0m2020-09-11 17:24:18 - [INFO] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:48 - ruby ruby/addudid.rb "fgjhgjg" "dosj@#%ASF1" "Seng's Ipad" "aaaa" "3"
+2020-09-11 17:24:18 - [INFO] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:49 - adfcander
+2020-09-11 17:24:18 - [ERROR] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:52 - wo和 
+2020-09-11 17:24:18 - [TRACE] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:53 - 7777
+2020-09-11 17:24:18 - [WARN] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:54 - warnning
+2020-09-11 17:24:18 - [INFO] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:59 - caller from D:/myproject/golog/example/example.go:59, msg: msg
+2020-09-11 17:24:18 - [INFO] - PS2019JUPXAFMM - D:/myproject/golog/example/example.go:60 - me
