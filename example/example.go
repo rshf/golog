@@ -42,16 +42,16 @@ func (l level) String() string {
 }
 
 func main() {
-	golog.InitLogger("log", 0, false)
+	// golog.InitLogger("log", 0, false)
 	golog.Name = "aaa.log"
 	cmd := fmt.Sprintf(`ruby ruby/addudid.rb "%s" "%s" "%s" "%s" "%s"`, "fgjhgjg", "dosj@#%ASF1", "Seng's Ipad", "aaaa", "3")
 	golog.Info(cmd)
 	golog.Infof("adf%s", "cander")
-	golog.Debug("wo和 ")
+	golog.Debug("debug wo和 ")
 	golog.Level = golog.TRACE
 	golog.Error("wo和 ")
-	golog.Fatal("asdf")
-	golog.Sql("aaa", "bbb", "ddd")
+	golog.Trace("7777")
+	golog.Warn("warnning")
 	w()
 }
 

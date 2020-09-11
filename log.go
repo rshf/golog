@@ -42,56 +42,40 @@ func InitLogger(path string, size int64, everyday bool) {
 
 // open file，  所有日志默认前面加了时间，
 func Tracef(format string, args ...interface{}) {
-	// Access,
-	if Level <= TRACE {
-		controlf(TRACE, format, args...)
-	}
+	control(TRACE, fmt.Sprintf(format, args...))
 }
 
 // open file，  所有日志默认前面加了时间，
 func Debugf(format string, args ...interface{}) {
 	// debug,
-	if Level <= DEBUG {
-		controlf(DEBUG, format, args...)
-	}
+	control(DEBUG, fmt.Sprintf(format, args...))
 }
 
 // open file，  所有日志默认前面加了时间，
 func Infof(format string, args ...interface{}) {
-	// debug,
-	if Level <= INFO {
-		controlf(INFO, format, args...)
-	}
+	control(INFO, fmt.Sprintf(format, args...))
 }
 
 // 可以根据下面格式一样，在format 后加上更详细的输出值
 func Warnf(format string, args ...interface{}) {
 	// error日志，添加了错误函数，
-	if Level <= WARN {
-		controlf(WARN, format, args...)
-	}
+	control(WARN, fmt.Sprintf(format, args...))
 }
 
 // 可以根据下面格式一样，在format 后加上更详细的输出值
 func Errorf(format string, args ...interface{}) {
 	// error日志，添加了错误函数，
-	if Level <= ERROR {
-		controlf(ERROR, format, args...)
-	}
+	control(ERROR, fmt.Sprintf(format, args...))
 }
 
 func Fatalf(format string, args ...interface{}) {
 	// error日志，添加了错误函数，
-	if Level <= FATAL {
-		controlf(FATAL, format, args...)
-	}
+	control(FATAL, fmt.Sprintf(format, args...))
 }
 
-func Sqlf(format string, args ...interface{}) {
-	// error日志，添加了错误函数，
-	if Level <= SQL {
-		controlf(SQL, format, args...)
-	}
+func UpFuncf(deep int, format string, args ...interface{}) {
+	// deep打印函数的深度， 相对于当前位置向外的深度
+	control(level(deep), fmt.Sprintf(format, args...))
 }
 
 // open file，  所有日志默认前面加了时间，
@@ -139,17 +123,12 @@ func Fatal(msg ...interface{}) {
 	if Level <= FATAL {
 		control(FATAL, arrToString(msg...))
 	}
+	os.Exit(1)
 }
 
-func Sql(msg ...interface{}) {
-	// error日志，添加了错误函数，
-	if Level <= SQL {
-		control(SQL, arrToString(msg...))
-	}
-}
-
-func UpFunc(msg interface{}) {
-	control(up, msg)
+func UpFunc(deep int, msg ...interface{}) {
+	// deep打印函数的深度， 相对于当前位置向外的深度
+	control(level(deep), arrToString(msg...))
 }
 
 func arrToString(msg ...interface{}) string {

@@ -3,18 +3,16 @@ package golog
 type level int
 
 const (
-	ALL level = iota * 10
+	All level = iota * 10
 	TRACE
 	DEBUG
 	INFO
 	WARN
 	ERROR
 	FATAL
-	SQL
-	NONE
-	up
 )
 
+var Up level
 var Level level = INFO
 
 func (l level) String() string {
@@ -31,9 +29,7 @@ func (l level) String() string {
 		return "ERROR"
 	case 60:
 		return "FATAL"
-	case 70:
-		return "SQL"
 	default:
-		return "DEBUG"
+		return "INFO"
 	}
 }
