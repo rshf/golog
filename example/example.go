@@ -56,6 +56,6 @@ func main() {
 }
 
 func w() {
-	golog.UpFunc("msg")
+	golog.UpFunc(0, "msg")
 	golog.Info("me")
 }
