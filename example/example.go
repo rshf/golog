@@ -42,7 +42,7 @@ func (l level) String() string {
 }
 
 func main() {
-	golog.InitLogger("log", 0, false)
+	// golog.InitLogger("log", 0, false)
 	golog.Name = "bbbb.log"
 	cmd := fmt.Sprintf(`ruby ruby/addudid.rb "%s" "%s" "%s" "%s" "%s"`, "fgjhgjg", "d#%ASF1", "Seng's Ipad", "aaaa", "3")
 	golog.Info(cmd)
@@ -56,6 +56,6 @@ func main() {
 }
 
 func w() {
-	golog.UpFunc(0, "msg")
+	golog.UpFunc(1, "msg")
 	golog.Info("me")
 }

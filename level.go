@@ -12,7 +12,6 @@ const (
 	FATAL
 )
 
-var Up level
 var Level level = INFO
 
 func (l level) String() string {

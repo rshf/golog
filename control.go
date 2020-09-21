@@ -18,11 +18,12 @@ type Format struct {
 	deep int
 }
 
-func control(lv level, msg interface{}) {
+func control(lv level, msg interface{}, deep ...int) {
 	// format = printFileline() + format // printfileline()打印出错误的文件和行数
 	// 判断是输出控制台 还是写入文件
+
 	if stdOut {
-		printLine(lv, msg)
+		printLine(lv, msg, deep...)
 		return
 	} else {
 		// 写入文件
@@ -55,11 +56,11 @@ func control(lv level, msg interface{}) {
 		}
 		// 如果按照文件大小判断的话，名字不变
 		thisName := filepath.Join(logPath, Name)
-		writeToFile(thisName, lv, msg)
+		writeToFile(thisName, lv, msg, deep...)
 	}
 }
 
-func writeToFile(name string, lv level, msg interface{}) {
+func writeToFile(name string, lv level, msg interface{}, deep ...int) {
 	//
 	//if _, ok := logName[name]; !ok {
 	//不存在就新建
@@ -72,8 +73,8 @@ func writeToFile(name string, lv level, msg interface{}) {
 		return
 	}
 	now := time.Now().Format("2006-01-02 15:04:05")
-	if lv == Up {
-		msg = fmt.Sprintf("caller from %s, msg: %v", printFileline(int(Up)), msg)
+	if len(deep) > 0 {
+		msg = fmt.Sprintf("caller from %s, msg: %v", printFileline(deep[0]), msg)
 	}
 	logMsg := fmt.Sprintf("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
 
@@ -85,10 +86,10 @@ func writeToFilef(name string, lv level, format string, args ...interface{}) {
 	writeToFile(name, lv, fmt.Sprintf(format, args...))
 }
 
-func printLine(lv level, msg interface{}) {
+func printLine(lv level, msg interface{}, deep ...int) {
 	now := time.Now().Format("2006-01-02 15:04:05")
-	if lv == Up {
-		msg = fmt.Sprintf("caller from %s -- %v", printFileline(int(Up)), msg)
+	if len(deep) > 0 {
+		msg = fmt.Sprintf("caller from %s -- %v", printFileline(deep[0]), msg)
 		lv = DEBUG
 	}
 	color.New(logColor[lv]...).Printf("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)

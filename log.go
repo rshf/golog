@@ -128,7 +128,7 @@ func Fatal(msg ...interface{}) {
 
 func UpFunc(deep int, msg ...interface{}) {
 	// deep打印函数的深度， 相对于当前位置向外的深度
-	control(level(deep), arrToString(msg...))
+	control(DEBUG, arrToString(msg...), deep)
 }
 
 func arrToString(msg ...interface{}) string {
