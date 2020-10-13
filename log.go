@@ -88,23 +88,14 @@ func Trace(msg ...interface{}) {
 func Debug(msg ...interface{}) {
 	// debug,
 	if Level <= DEBUG {
-		control(DEBUG, arrToString(msg...), time.Now())
+		s(Level, arrToString(msg...))
 	}
 }
 
 // open file，  所有日志默认前面加了时间，
 func Info(msg ...interface{}) {
 	if Level <= INFO {
-		if Synchronous {
-			cache <- msgLog{
-				msg:    arrToString(msg...),
-				level:  INFO,
-				create: time.Now(),
-			}
-		} else {
-			control(INFO, arrToString(msg...), time.Now())
-		}
-
+		s(Level, arrToString(msg...))
 	}
 }
 
@@ -112,7 +103,7 @@ func Info(msg ...interface{}) {
 func Warn(msg ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= WARN {
-		control(WARN, arrToString(msg...), time.Now())
+		s(Level, arrToString(msg...))
 	}
 }
 
@@ -120,21 +111,21 @@ func Warn(msg ...interface{}) {
 func Error(msg ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= ERROR {
-		control(ERROR, arrToString(msg...), time.Now())
+		s(Level, arrToString(msg...))
 	}
 }
 
 func Fatal(msg ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= FATAL {
-		control(FATAL, arrToString(msg...), time.Now())
+		s(Level, arrToString(msg...))
 	}
 	os.Exit(1)
 }
 
 func UpFunc(deep int, msg ...interface{}) {
 	// deep打印函数的深度， 相对于当前位置向外的深度
-	control(DEBUG, arrToString(msg...), time.Now(), deep)
+	s(DEBUG, arrToString(msg...))
 }
 
 func arrToString(msg ...interface{}) string {
@@ -143,4 +134,16 @@ func arrToString(msg ...interface{}) string {
 		ll = append(ll, "%v")
 	}
 	return fmt.Sprintf(strings.Join(ll, ""), msg...)
+}
+
+func s(level level, msg string, deep ...int) {
+	if Synchronous {
+		cache <- msgLog{
+			msg:    msg,
+			level:  level,
+			create: time.Now(),
+		}
+	} else {
+		control(INFO, msg, time.Now())
+	}
 }
