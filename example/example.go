@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/hyahm/golog"
 )
 
@@ -42,20 +40,18 @@ func (l level) String() string {
 }
 
 func main() {
-	// golog.InitLogger("log", 0, false)
+	golog.InitLogger("log", 0, false)
 	golog.Name = "bbbb.log"
-	cmd := fmt.Sprintf(`ruby ruby/addudid.rb "%s" "%s" "%s" "%s" "%s"`, "fgjhgjg", "d#%ASF1", "Seng's Ipad", "aaaa", "3")
-	golog.Info(cmd)
+	golog.SetSync(true)
 	golog.Infof("adf%s", "cander")
 	golog.Debug("debug wo和 ")
 	golog.Level = golog.TRACE
 	golog.Error("wo和 ")
 	golog.Trace("7777")
 	golog.Warn("warnning")
-	w()
-}
+	golog.SetSync(true)
+	golog.Info("999")
 
-func w() {
 	golog.UpFunc(1, "msg")
 	golog.Info("me")
 }

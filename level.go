@@ -12,6 +12,7 @@ const (
 	FATAL
 )
 
+// 日志级别
 var Level level = INFO
 
 func (l level) String() string {

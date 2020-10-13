@@ -16,6 +16,7 @@ func init() {
 	logColor[WARN] = []color.Attribute{color.FgYellow}
 }
 
+// 设置某级别的颜色
 func SetColor(lv level, attrs []color.Attribute) {
 	cmu.Lock()
 	logColor[lv] = attrs

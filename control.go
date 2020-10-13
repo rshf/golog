@@ -12,13 +12,13 @@ import (
 
 var day = ""
 
-type Format struct {
-	lv   level
-	msg  interface{}
-	deep int
-}
+// type format struct {
+// 	lv   level
+// 	msg  interface{}
+// 	deep int
+// }
 
-func control(lv level, msg interface{}, deep ...int) {
+func control(lv level, msg interface{}, localtime time.Time, deep ...int) {
 	// format = printFileline() + format // printfileline()打印出错误的文件和行数
 	// 判断是输出控制台 还是写入文件
 
@@ -27,7 +27,6 @@ func control(lv level, msg interface{}, deep ...int) {
 		return
 	} else {
 		// 写入文件
-		localtime := time.Now()
 		if everyDay {
 			// 如果每天备份的话， 文件名需要更新
 
@@ -77,7 +76,10 @@ func writeToFile(name string, lv level, msg interface{}, deep ...int) {
 		msg = fmt.Sprintf("caller from %s, msg: %v", printFileline(deep[0]), msg)
 	}
 	logMsg := fmt.Sprintf("%s - [%s] - %s - %s - %v\n", now, lv, hostname, printFileline(0), msg)
-
+	// cache <- msgLog{
+	// 	f:   f,
+	// 	msg: logMsg,
+	// }
 	f.Write([]byte(logMsg))
 	f.Close()
 }
