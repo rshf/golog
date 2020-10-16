@@ -102,7 +102,7 @@ func printLinef(lv level, format string, args ...interface{}) {
 }
 
 func printFileline(c int) string {
-	c += 5
+	c += 6
 	_, file, line, ok := runtime.Caller(c)
 	if !ok {
 		file = "???"
