@@ -40,8 +40,6 @@ func (l level) String() string {
 }
 
 func main() {
-	golog.InitLogger("log", 0, false)
-	golog.Name = "bbbb.log"
 	golog.SetSync(true)
 	golog.Infof("adf%s", "cander")
 	golog.Debug("debug wo和 ")

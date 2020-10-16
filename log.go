@@ -41,46 +41,60 @@ func InitLogger(path string, size int64, everyday bool) {
 
 // open file，  所有日志默认前面加了时间，
 func Tracef(format string, args ...interface{}) {
-	Trace(fmt.Sprintf(format, args...))
+	if Level <= TRACE {
+		s(TRACE, fmt.Sprintf(format, args...))
+	}
 }
 
 // open file，  所有日志默认前面加了时间，
 func Debugf(format string, args ...interface{}) {
-	Debug(fmt.Sprintf(format, args...))
+	if Level <= DEBUG {
+		s(DEBUG, fmt.Sprintf(format, args...))
+	}
 }
 
 // open file，  所有日志默认前面加了时间，
 func Infof(format string, args ...interface{}) {
-	Info(fmt.Sprintf(format, args...))
+	if Level <= INFO {
+		s(INFO, fmt.Sprintf(format, args...))
+	}
 }
 
 // 可以根据下面格式一样，在format 后加上更详细的输出值
 func Warnf(format string, args ...interface{}) {
 	// error日志，添加了错误函数，
-	Warn(fmt.Sprintf(format, args...))
+	if Level <= WARN {
+		s(WARN, fmt.Sprintf(format, args...))
+	}
 }
 
 // 可以根据下面格式一样，在format 后加上更详细的输出值
 func Errorf(format string, args ...interface{}) {
 	// error日志，添加了错误函数，
-	Error(fmt.Sprintf(format, args...))
+	if Level <= ERROR {
+		s(ERROR, fmt.Sprintf(format, args...))
+	}
 }
 
 func Fatalf(format string, args ...interface{}) {
 	// error日志，添加了错误函数，
-	Fatal(fmt.Sprintf(format, args...))
+	if Level <= FATAL {
+		s(FATAL, fmt.Sprintf(format, args...))
+	}
 }
 
 func UpFuncf(deep int, format string, args ...interface{}) {
 	// deep打印函数的深度， 相对于当前位置向外的深度
-	UpFunc(deep, fmt.Sprintf(format, args...))
+	if Level <= DEBUG {
+		s(DEBUG, fmt.Sprintf(format, args...))
+	}
 }
 
 // open file，  所有日志默认前面加了时间，
 func Trace(msg ...interface{}) {
 	// Access,
 	if Level <= TRACE {
-		control(TRACE, arrToString(msg...), time.Now())
+		s(Level, arrToString(msg...))
 	}
 }
 
