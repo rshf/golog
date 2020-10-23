@@ -94,7 +94,7 @@ func UpFuncf(deep int, format string, args ...interface{}) {
 func Trace(msg ...interface{}) {
 	// Access,
 	if Level <= TRACE {
-		s(Level, arrToString(msg...))
+		s(TRACE, arrToString(msg...))
 	}
 }
 
@@ -102,14 +102,14 @@ func Trace(msg ...interface{}) {
 func Debug(msg ...interface{}) {
 	// debug,
 	if Level <= DEBUG {
-		s(Level, arrToString(msg...))
+		s(DEBUG, arrToString(msg...))
 	}
 }
 
 // open file，  所有日志默认前面加了时间，
 func Info(msg ...interface{}) {
 	if Level <= INFO {
-		s(Level, arrToString(msg...))
+		s(INFO, arrToString(msg...))
 	}
 }
 
@@ -117,7 +117,7 @@ func Info(msg ...interface{}) {
 func Warn(msg ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= WARN {
-		s(Level, arrToString(msg...))
+		s(WARN, arrToString(msg...))
 	}
 }
 
@@ -125,14 +125,14 @@ func Warn(msg ...interface{}) {
 func Error(msg ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= ERROR {
-		s(Level, arrToString(msg...))
+		s(ERROR, arrToString(msg...))
 	}
 }
 
 func Fatal(msg ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= FATAL {
-		s(Level, arrToString(msg...))
+		s(FATAL, arrToString(msg...))
 	}
 	os.Exit(1)
 }
@@ -160,6 +160,6 @@ func s(level level, msg string, deep ...int) {
 			create: time.Now(),
 		}
 	} else {
-		control(INFO, msg, time.Now())
+		control(level, msg, time.Now())
 	}
 }

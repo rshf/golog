@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/fatih/color"
 	"github.com/hyahm/golog"
 )
 
@@ -41,6 +42,10 @@ func (l level) String() string {
 
 func main() {
 	golog.SetSync(true)
+	golog.Level = golog.DEBUG
+	c := make([]color.Attribute, 0)
+	c = append(c, color.FgBlue)
+	golog.SetColor(golog.DEBUG, c)
 	golog.Infof("adf%s", "cander")
 	golog.Debug("debug wo和 ")
 	golog.Level = golog.TRACE
