@@ -2,6 +2,8 @@ package golog
 
 import (
 	"time"
+
+	"github.com/fatih/color"
 )
 
 var cache chan msgLog
@@ -13,25 +15,34 @@ type msgLog struct {
 	level  level
 	create time.Time
 	deep   int
+	color  []color.Attribute
+	line   string
 }
 
-func SetSync(synchronous bool) {
-	if Synchronous && cache != nil {
-		cache = make(chan msgLog, 10000)
-		go write()
-	}
+func init() {
+	cache = make(chan msgLog, 1000)
+	exit = make(chan bool)
+	go write()
 }
+
+var exit chan bool
 
 func write() {
-	for {
-		select {
-		case c := <-cache:
-			control(c.level, c.msg, c.create, c.deep)
-		}
+	for c := range cache {
+		c.control()
 	}
+	exit <- true
+	// for {
+	// 	select {
+	// 	case c := <-cache:
+	// 		fmt.Println("0000")
+	// 		c.control()
+	// 	}
+	// }
 }
 
-// func Sync() {
-// 	// 等待日志写完
-// 	close(cache)
-// }
+func Sync() {
+	// 等待日志写完
+	close(cache)
+	<-exit
+}

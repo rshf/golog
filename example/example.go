@@ -41,7 +41,7 @@ func (l level) String() string {
 }
 
 func main() {
-	golog.SetSync(true)
+	golog.InitLogger("log", 0, true)
 	golog.Level = golog.DEBUG
 	c := make([]color.Attribute, 0)
 	c = append(c, color.FgBlue)
@@ -52,9 +52,12 @@ func main() {
 	golog.Error("wo和 ")
 	golog.Trace("7777")
 	golog.Warn("warnning")
-	golog.SetSync(true)
 	golog.Info("999")
-
-	golog.UpFunc(1, "msg")
+	aaa()
 	golog.Info("me")
+	golog.Sync()
+}
+
+func aaa() {
+	golog.UpFunc(1, "msg")
 }

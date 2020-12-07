@@ -86,7 +86,7 @@ func Fatalf(format string, args ...interface{}) {
 func UpFuncf(deep int, format string, args ...interface{}) {
 	// deep打印函数的深度， 相对于当前位置向外的深度
 	if Level <= DEBUG {
-		s(DEBUG, fmt.Sprintf(format, args...))
+		s(DEBUG, fmt.Sprintf(format, args...), deep)
 	}
 }
 
@@ -134,13 +134,14 @@ func Fatal(msg ...interface{}) {
 	if Level <= FATAL {
 		s(FATAL, arrToString(msg...))
 	}
+	Sync()
 	os.Exit(1)
 }
 
 func UpFunc(deep int, msg ...interface{}) {
 	// deep打印函数的深度， 相对于当前位置向外的深度
 	if Level <= DEBUG {
-		s(DEBUG, arrToString(msg...))
+		s(DEBUG, arrToString(msg...), deep)
 	}
 }
 
@@ -153,13 +154,14 @@ func arrToString(msg ...interface{}) string {
 }
 
 func s(level level, msg string, deep ...int) {
-	if Synchronous {
-		cache <- msgLog{
-			msg:    msg,
-			level:  level,
-			create: time.Now(),
-		}
-	} else {
-		control(level, msg, time.Now())
+	if len(deep) > 0 && deep[0] > 0 {
+		msg = fmt.Sprintf("caller from %s -- %v", printFileline(deep[0]), msg)
+	}
+	cache <- msgLog{
+		msg:    msg,
+		level:  level,
+		create: time.Now(),
+		color:  logColor[level],
+		line:   printFileline(0),
 	}
 }
