@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/fatih/color"
 	"github.com/hyahm/golog"
 )
@@ -41,7 +43,7 @@ func (l level) String() string {
 }
 
 func main() {
-	golog.InitLogger("log", 0, true)
+	golog.InitLogger("log", 0, true, 1)
 	golog.Level = golog.DEBUG
 	c := make([]color.Attribute, 0)
 	c = append(c, color.FgBlue)
@@ -54,6 +56,7 @@ func main() {
 	golog.Warn("warnning")
 	golog.Info("999")
 	aaa()
+	time.Sleep(10 * time.Second)
 	golog.Info("me")
 	golog.Sync()
 }
