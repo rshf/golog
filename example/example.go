@@ -7,47 +7,16 @@ import (
 	"github.com/hyahm/golog"
 )
 
-type level int
-
-const (
-	TRACE level = iota * 10
-	DEBUG
-	INFO
-	WARN
-	ERROR
-	FATAL
-	SQL
-)
-
-var Level level
-
-func (l level) String() string {
-	switch l {
-	case 0:
-		return "TRACE"
-	case 10:
-		return "DEBUG"
-	case 20:
-		return "INFO"
-	case 30:
-		return "WARN"
-	case 40:
-		return "ERROR"
-	case 50:
-		return "FATAL"
-	case 60:
-		return "SQL"
-	default:
-		return "DEBUG"
-	}
-}
-
 func main() {
-	golog.InitLogger("log", 0, true, 1)
+	// 第一个参数是设置日志目录 ， 如果为空，默认显示再控制台
+	// 第二个参数是设置日志切割的大小，0 表示不按照大小切割， 默认单位M，
+	//  第三个事是否每天切割，
+	// 第四个是删除多少天以前的日志， 根据设置的name 来匹配， 0表示不删除
+	// golog.InitLogger("log", 0, true, 1)
 	golog.Level = golog.DEBUG
-	c := make([]color.Attribute, 0)
-	c = append(c, color.FgBlue)
-	golog.SetColor(golog.DEBUG, c)
+	debugColor := make([]color.Attribute, 0)
+	debugColor = append(debugColor, color.FgBlue) // 前景色为蓝色
+	golog.SetColor(golog.DEBUG, debugColor)       // 设置debug级别的日志颜色
 	golog.Infof("adf%s", "cander")
 	golog.Debug("debug wo和 ")
 	golog.Level = golog.TRACE
