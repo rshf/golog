@@ -1,8 +1,6 @@
 package main
 
 import (
-	"time"
-
 	"github.com/fatih/color"
 	"github.com/hyahm/golog"
 )
@@ -12,7 +10,8 @@ func main() {
 	// 第二个参数是设置日志切割的大小，0 表示不按照大小切割， 默认单位M，
 	//  第三个事是否每天切割，
 	// 第四个是删除多少天以前的日志， 根据设置的name 来匹配， 0表示不删除
-	// golog.InitLogger("log", 0, true, 1)
+	defer golog.Sync()
+	golog.InitLogger("log", 0, true, 1)
 	golog.Level = golog.DEBUG
 	debugColor := make([]color.Attribute, 0)
 	debugColor = append(debugColor, color.FgBlue) // 前景色为蓝色
@@ -22,12 +21,12 @@ func main() {
 	golog.Level = golog.TRACE
 	golog.Error("wo和 ")
 	golog.Trace("7777")
+	golog.InitLogger("", 0, true, 1)
 	golog.Warn("warnning")
 	golog.Info("999")
 	aaa()
-	time.Sleep(10 * time.Second)
 	golog.Info("me")
-	golog.Sync()
+
 }
 
 func aaa() {

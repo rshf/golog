@@ -9,11 +9,11 @@ import (
 )
 
 var (
-	logPath   string = ""    // 文件路径
-	fileSize  int64  = 0     // 切割的文件大小
-	everyDay  bool   = false // 每天一个来切割文件 （这个比上面个优先级高）
-	stdOut    bool   = true
-	cleanTime int    = 0
+	logPath   string        // 文件路径
+	fileSize  int64         // 切割的文件大小
+	everyDay  bool          // 每天一个来切割文件 （这个比上面个优先级高）
+	stdOut    bool          = true
+	cleanTime time.Duration = 0
 )
 
 // 文件名
@@ -26,7 +26,7 @@ func init() {
 	hostname, _ = os.Hostname()
 }
 
-func InitLogger(path string, size int64, everyday bool, ct ...int) {
+func InitLogger(path string, size int64, everyday bool, ct ...time.Duration) {
 	if path != "" {
 		stdOut = false
 		logPath = filepath.Clean(path)
@@ -39,6 +39,10 @@ func InitLogger(path string, size int64, everyday bool, ct ...int) {
 		if len(ct) > 0 {
 			cleanTime = ct[0]
 		}
+	} else {
+		fmt.Println("999")
+		logPath = ""
+		stdOut = true
 	}
 
 }
@@ -167,5 +171,6 @@ func s(level level, msg string, deep ...int) {
 		create: time.Now(),
 		color:  logColor[level],
 		line:   printFileline(0),
+		out:    stdOut,
 	}
 }

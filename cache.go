@@ -19,6 +19,7 @@ type msgLog struct {
 	deep   int
 	color  []color.Attribute
 	line   string
+	out    bool
 }
 
 func init() {
@@ -34,13 +35,12 @@ func clean() {
 	if logPath == "" || cleanTime <= 0 {
 		return
 	}
-	tk := time.NewTicker(time.Second * 60 * 60)
 	for {
 		select {
-		case <-tk.C:
+		case <-time.After(cleanTime):
 			fs, _ := ioutil.ReadDir(logPath)
 			for _, f := range fs {
-				if strings.Contains(f.Name(), Name) && time.Since(f.ModTime()) >= 24*60*60*time.Duration(cleanTime) {
+				if strings.Contains(f.Name(), Name) {
 					os.Remove(filepath.Join(logPath, f.Name()))
 				}
 			}

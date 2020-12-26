@@ -21,7 +21,7 @@ func (lm *msgLog) control() {
 	// format = printFileline() + format // printfileline()打印出错误的文件和行数
 	// 判断是输出控制台 还是写入文件
 
-	if stdOut {
+	if lm.out {
 		lm.printLine()
 		return
 	} else {

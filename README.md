@@ -17,6 +17,7 @@ import (
 )
 
 func main() {
+	defer golog.Sync()
 	// 第一个参数是设置日志目录 ， 如果为空，默认显示再控制台
 	// 第二个参数是设置日志切割的大小，0 表示不按照大小切割， 默认单位M，
 	//  第三个事是否每天切割，
@@ -36,7 +37,7 @@ func main() {
 	aaa()
 	time.Sleep(10 * time.Second)
 	golog.Info("me")
-	golog.Sync()
+	
 }
 
 func aaa() {
