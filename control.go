@@ -45,7 +45,7 @@ func (lm *msgLog) control() {
 			if err == nil {
 				// 如果大于设定值， 那么
 				fi, err := f.Stat()
-				if err == nil && fi.Size() >= fileSize*1024*1024 {
+				if err == nil && fi.Size() >= fileSize*1024 {
 					os.Rename(Name, fmt.Sprintf("%d_%s", lm.create.Unix(), Name))
 				}
 				defer f.Close()

@@ -40,7 +40,6 @@ func InitLogger(path string, size int64, everyday bool, ct ...time.Duration) {
 			cleanTime = ct[0]
 		}
 	} else {
-		fmt.Println("999")
 		logPath = ""
 		stdOut = true
 	}
