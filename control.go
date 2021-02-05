@@ -28,14 +28,17 @@ func (lm *msgLog) control() {
 		// 写入文件
 		if everyDay {
 			// 如果每天备份的话， 文件名需要更新
-
 			thisDay := fmt.Sprintf("%d-%d-%d", lm.create.Year(), lm.create.Month(), lm.create.Day())
 			if day == "" {
 				day = thisDay
 			}
 			if thisDay != day {
 				// 重命名
-				os.Rename(Name, day+"_"+Name)
+				if err := os.Rename(filepath.Join(logPath, Name), filepath.Join(logPath, day+"_"+Name)); err != nil {
+					fmt.Println(err)
+					lm.out = true
+					return
+				}
 				day = thisDay
 			}
 
