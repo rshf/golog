@@ -77,7 +77,7 @@ func (lm *msgLog) writeToFile(name string) {
 	// if len(deep) > 0 {
 	// 	msg = fmt.Sprintf("caller from %s, msg: %v", printFileline(deep[0]), msg)
 	// }
-	logMsg := fmt.Sprintf("%s - [%s] - %s - %s - %v\n", now, lm.level, hostname, lm.line, lm.msg)
+	logMsg := fmt.Sprintf("%s - [%s] - %s - %s - %s - %v\n", now, lm.level, lm.prev, hostname, lm.line, lm.msg)
 	// cache <- msgLog{
 	// 	f:   f,
 	// 	msg: logMsg,
@@ -89,12 +89,12 @@ func (lm *msgLog) writeToFile(name string) {
 func (lm *msgLog) printLine() {
 	now := lm.create.Format("2006-01-02 15:04:05")
 
-	color.New(lm.color...).Printf("%s - [%s] - %s - %s - %v\n", now, lm.level, hostname, lm.line, lm.msg)
+	color.New(lm.color...).Printf("%s - [%s] - %s - %s - %s - %v\n", now, lm.level, lm.prev, hostname, lm.line, lm.msg)
 }
 
-func (lm *msgLog) printLinef(lv level, format string, args ...interface{}) {
-	lm.printLine()
-}
+// func (lm *msgLog) printLinef(lv level, format string, args ...interface{}) {
+// 	lm.printLine()
+// }
 
 func printFileline(c int) string {
 	c += 3

@@ -13,8 +13,9 @@ func main() {
 	//  第三个事是否每天切割，
 	// 第四个是删除多少天以前的日志， 根据设置的name 来匹配， 0表示不删除
 	defer golog.Sync()
-	golog.InitLogger("log", 0, true, 1)
+	// golog.InitLogger("log", 0, true, 1)
 	for {
+		golog.NewLabel("typ", "update").Info("aaaaa")
 		golog.Level = golog.DEBUG
 		debugColor := make([]color.Attribute, 0)
 		debugColor = append(debugColor, color.FgBlue) // 前景色为蓝色
@@ -29,6 +30,7 @@ func main() {
 		aaa()
 		golog.Info("me")
 		time.Sleep(1 * time.Second)
+		golog.Fatal("111")
 	}
 
 }

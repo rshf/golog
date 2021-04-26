@@ -13,6 +13,7 @@ import (
 var cache chan msgLog
 
 type msgLog struct {
+	prev   string
 	msg    string
 	level  level
 	create time.Time

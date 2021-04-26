@@ -24,6 +24,8 @@ func main() {
 	// 第四个是删除多少天以前的日志， 根据设置的name 来匹配， 0表示不删除
 	// golog.InitLogger("log", 0, true, 1)
 	golog.Level = golog.DEBUG
+	// 新增label的支持，  通过newLabel来打印带label 的 日志
+	golog.NewLabel("typ", "update").Info("aaaaa")
 	debugColor := make([]color.Attribute, 0)
 	debugColor = append(debugColor, color.FgBlue) // 前景色为蓝色
 	golog.SetColor(golog.DEBUG, debugColor)       // 设置debug级别的日志颜色
