@@ -12,12 +12,12 @@ var (
 	logPath   string        // 文件路径
 	fileSize  int64         // 切割的文件大小
 	everyDay  bool          // 每天一个来切割文件 （这个比上面个优先级高）
-	stdOut    bool          = true
 	cleanTime time.Duration = 0
+	dir       string
 )
 
 // 文件名
-var Name = "info.log"
+var name = "info.log"
 
 // hostname
 var hostname = ""
@@ -27,23 +27,24 @@ func init() {
 }
 
 func InitLogger(path string, size int64, everyday bool, ct ...time.Duration) {
-	if path != "" {
-		stdOut = false
-		logPath = filepath.Clean(path)
-		err := os.MkdirAll(logPath, 0755)
-		if err != nil {
-			panic(err)
-		}
-		fileSize = size
-		everyDay = everyday
-		if len(ct) > 0 {
-			cleanTime = ct[0]
-		}
-	} else {
-		logPath = ""
-		stdOut = true
+	if path == "" {
+		logPath = "."
+		return
 	}
+	name = filepath.Base(path)
+	dir = filepath.Dir(path)
+	logPath = filepath.Clean(path)
 
+	err := os.MkdirAll(dir, 0755)
+	if err != nil {
+		panic(err)
+	}
+	fileSize = size
+	everyDay = everyday
+	if len(ct) > 0 {
+		cleanTime = ct[0]
+	}
+	go clean(dir, name)
 }
 
 // open file，  所有日志默认前面加了时间，
@@ -165,11 +166,15 @@ func s(level level, msg string, deep ...int) {
 		msg = fmt.Sprintf("caller from %s -- %v", printFileline(deep[0]), msg)
 	}
 	cache <- msgLog{
-		msg:    msg,
-		level:  level,
-		create: time.Now(),
-		color:  logColor[level],
-		line:   printFileline(0),
-		out:    stdOut,
+		msg:     msg,
+		level:   level,
+		name:    name,
+		create:  time.Now(),
+		color:   GetColor(level),
+		line:    printFileline(0),
+		out:     logPath == ".",
+		path:    dir,
+		logPath: logPath,
 	}
+
 }

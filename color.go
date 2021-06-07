@@ -6,25 +6,40 @@ import (
 	"github.com/fatih/color"
 )
 
-var logColor map[level][]color.Attribute
-var cmu *sync.RWMutex
+var logColor *levelColors
+
+type levelColors struct {
+	attrs map[level][]color.Attribute
+	mu    *sync.RWMutex
+}
 
 func init() {
-	cmu = &sync.RWMutex{}
-	logColor = make(map[level][]color.Attribute)
-	logColor[ERROR] = []color.Attribute{color.FgRed}
-	logColor[WARN] = []color.Attribute{color.FgYellow}
+	logColor = &levelColors{
+		mu:    &sync.RWMutex{},
+		attrs: make(map[level][]color.Attribute),
+	}
+	SetColor(ERROR, []color.Attribute{color.FgRed})
+	SetColor(WARN, []color.Attribute{color.FgYellow})
 }
 
 // 设置某级别的颜色
 func SetColor(lv level, attrs []color.Attribute) {
-	cmu.Lock()
-	logColor[lv] = attrs
-	cmu.Unlock()
+	logColor.mu.Lock()
+	logColor.attrs[lv] = attrs
+	logColor.mu.Unlock()
 }
 
-func DelColor(lv level, attrs []color.Attribute) {
-	cmu.Lock()
-	delete(logColor, lv)
-	cmu.Unlock()
+func GetColor(lv level) []color.Attribute {
+	logColor.mu.RLock()
+	defer logColor.mu.RUnlock()
+	if attrs, ok := logColor.attrs[lv]; ok {
+		return attrs
+	}
+	return nil
+}
+
+func CleanColor(lv level, attrs []color.Attribute) {
+	logColor.mu.Lock()
+	delete(logColor.attrs, lv)
+	logColor.mu.Unlock()
 }

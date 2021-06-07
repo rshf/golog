@@ -2,36 +2,78 @@ package golog
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path/filepath"
+	"strings"
+	"sync"
 	"time"
 
 	"github.com/fatih/color"
 )
 
 type Label struct {
-	msg    string
-	level  level
-	create time.Time
-	label  map[string]string
-	deep   int
-	color  []color.Attribute
-	line   string
-	out    bool
+	msg      string
+	level    level
+	create   time.Time
+	label    map[string]string
+	deep     int
+	color    []color.Attribute
+	mu       *sync.RWMutex
+	line     string
+	out      bool
+	path     string
+	dir      string
+	size     int64
+	everyDay bool
+	name     string
+	expire   time.Duration
 }
 
-func NewLabel(key, value string) *Label {
-	l := &Label{
-		label: make(map[string]string),
+func (l *Label) clean() {
+	if name == "" || cleanTime <= 0 {
+		return
 	}
+	for {
+		time.Sleep(cleanTime)
+		fs, _ := ioutil.ReadDir(l.dir)
+		for _, f := range fs {
+			if strings.Contains(f.Name(), l.name) {
+				os.Remove(filepath.Join(logPath, f.Name()))
+			}
+		}
+
+	}
+}
+
+func NewLog(path string, size int64, everyday bool, ct ...time.Duration) *Label {
+	var expire time.Duration
+
+	if len(ct) > 0 {
+		expire = ct[0]
+	}
+	l := &Label{
+		label:    make(map[string]string),
+		mu:       &sync.RWMutex{},
+		path:     path,
+		size:     size,
+		everyDay: everyday,
+		expire:   expire,
+	}
+	return l
+}
+
+func (l *Label) AddLabel(key, value string) *Label {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	l.label[key] = value
 	return l
 }
 
-func (l *Label) SetLabel(key, value string) *Label {
-	if l.label == nil {
-		l.label = make(map[string]string)
-	}
-	l.label[key] = value
+func (l *Label) DelLabel(key string) *Label {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	delete(l.label, key)
 	return l
 }
 
@@ -103,8 +145,8 @@ func (l *Label) s(level level, msg string, deep ...int) {
 		msg:    msg,
 		level:  level,
 		create: time.Now(),
-		color:  logColor[level],
+		color:  GetColor(level),
 		line:   printFileline(0),
-		out:    stdOut,
+		out:    logPath == "",
 	}
 }

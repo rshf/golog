@@ -1,13 +1,46 @@
 package golog
 
 import (
-	"fmt"
+	"path/filepath"
 	"testing"
-	"time"
+
+	"github.com/fatih/color"
 )
 
 func TestLog(t *testing.T) {
-	fmt.Println(time.Now())
-	Info("two")
-	Error("one")
+	defer Sync()
+	Info("11111")
+	SetColor(INFO, []color.Attribute{
+		color.BgBlack,
+		color.FgGreen,
+	})
+	Info("22222")
+	Info("3333")
+	Error("4444")
+
+	Info("5555")
+}
+
+func TestLog1(t *testing.T) {
+	defer Sync()
+	InitLogger("log\\bbbbb.log", 0, true)
+	Info("11111")
+	SetColor(INFO, []color.Attribute{
+		color.BgBlack,
+		color.FgGreen,
+	})
+	Info("22222")
+	Info("3333")
+	Error("4444")
+
+	Info("5555")
+}
+
+func TestColor(t *testing.T) {
+	attrs := []color.Attribute{
+		color.FgBlue,
+		color.Bold,
+	}
+	logPath = filepath.Clean("")
+	color.New(attrs...).Println(logPath)
 }
