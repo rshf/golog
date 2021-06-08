@@ -44,3 +44,17 @@ func TestColor(t *testing.T) {
 	logPath = filepath.Clean("")
 	color.New(attrs...).Println(logPath)
 }
+
+func TestNewLog(t *testing.T) {
+	defer Sync()
+	a := NewLog("log\\aaa.log", 0, false)
+	a.Info("bbb")
+	a.Info("aaaa")
+	a.Info("cccc")
+	a.Info("ddddd")
+}
+
+func TestFilePath(t *testing.T) {
+	t.Log(filepath.Dir(""))
+	t.Log(filepath.Base(""))
+}

@@ -13,21 +13,20 @@ import (
 )
 
 type Label struct {
-	msg      string
-	level    level
-	create   time.Time
-	label    map[string]string
-	deep     int
-	color    []color.Attribute
-	mu       *sync.RWMutex
-	line     string
-	out      bool
-	path     string
-	dir      string
-	size     int64
-	everyDay bool
-	name     string
-	expire   time.Duration
+	LogPath  string
+	Create   time.Time
+	Label    map[string]string
+	Deep     int
+	Color    []color.Attribute
+	Mu       *sync.RWMutex
+	Line     string
+	Out      bool
+	Path     string
+	Dir      string
+	Size     int64
+	EveryDay bool
+	Name     string
+	Expire   time.Duration
 }
 
 func (l *Label) clean() {
@@ -36,9 +35,9 @@ func (l *Label) clean() {
 	}
 	for {
 		time.Sleep(cleanTime)
-		fs, _ := ioutil.ReadDir(l.dir)
+		fs, _ := ioutil.ReadDir(l.Dir)
 		for _, f := range fs {
-			if strings.Contains(f.Name(), l.name) {
+			if strings.Contains(f.Name(), l.Name) {
 				os.Remove(filepath.Join(logPath, f.Name()))
 			}
 		}
@@ -48,32 +47,39 @@ func (l *Label) clean() {
 
 func NewLog(path string, size int64, everyday bool, ct ...time.Duration) *Label {
 	var expire time.Duration
-
+	path = filepath.Clean(path)
 	if len(ct) > 0 {
 		expire = ct[0]
 	}
 	l := &Label{
-		label:    make(map[string]string),
-		mu:       &sync.RWMutex{},
-		path:     path,
-		size:     size,
-		everyDay: everyday,
-		expire:   expire,
+		Label: make(map[string]string),
+		Mu:    &sync.RWMutex{},
+		Path:  path,
+
+		Size:     size,
+		EveryDay: everyday,
+		Expire:   expire,
+	}
+	l.LogPath = path
+	l.Dir = filepath.Dir(path)
+	l.Name = filepath.Base(path)
+	if l.Name != "." {
+		go l.clean()
 	}
 	return l
 }
 
 func (l *Label) AddLabel(key, value string) *Label {
-	l.mu.Lock()
-	defer l.mu.Unlock()
-	l.label[key] = value
+	l.Mu.Lock()
+	defer l.Mu.Unlock()
+	l.Label[key] = value
 	return l
 }
 
 func (l *Label) DelLabel(key string) *Label {
-	l.mu.RLock()
-	defer l.mu.RUnlock()
-	delete(l.label, key)
+	l.Mu.RLock()
+	defer l.Mu.RUnlock()
+	delete(l.Label, key)
 	return l
 }
 
@@ -137,16 +143,19 @@ func (l *Label) s(level level, msg string, deep ...int) {
 		msg = fmt.Sprintf("caller from %s -- %v", printFileline(deep[0]), msg)
 	}
 	pre := ""
-	for k, v := range l.label {
+	for k, v := range l.Label {
 		pre += fmt.Sprintf("[%s = %s]", k, v)
 	}
 	cache <- msgLog{
-		prev:   pre,
-		msg:    msg,
-		level:  level,
-		create: time.Now(),
-		color:  GetColor(level),
-		line:   printFileline(0),
-		out:    logPath == "",
+		prev:    pre,
+		msg:     msg,
+		level:   level,
+		create:  time.Now(),
+		color:   GetColor(level),
+		line:    printFileline(0),
+		out:     l.Name == ".",
+		path:    l.Dir,
+		logPath: l.LogPath,
+		name:    l.Name,
 	}
 }
