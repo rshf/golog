@@ -57,6 +57,7 @@ func (lm *msgLog) writeToFile() {
 	//
 	//if _, ok := logName[name]; !ok {
 	//不存在就新建
+	fmt.Println("------" + lm.logPath + "----")
 	f, err := os.OpenFile(lm.logPath, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
 	if err != nil {
 		// 如果失败，切换到控制台输出

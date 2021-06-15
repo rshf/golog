@@ -153,7 +153,7 @@ func (l *Label) s(level level, msg string, deep ...int) {
 		create:  time.Now(),
 		color:   GetColor(level),
 		line:    printFileline(0),
-		out:     l.Name == ".",
+		out:     l.Name == "." || l.Name == "",
 		path:    l.Dir,
 		logPath: l.LogPath,
 		name:    l.Name,

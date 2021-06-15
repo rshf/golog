@@ -17,7 +17,7 @@ var (
 )
 
 // 文件名
-var name = "info.log"
+var name string
 
 // hostname
 var hostname = ""
@@ -172,7 +172,7 @@ func s(level level, msg string, deep ...int) {
 		create:  time.Now(),
 		color:   GetColor(level),
 		line:    printFileline(0),
-		out:     logPath == ".",
+		out:     logPath == "." || logPath == "",
 		path:    dir,
 		logPath: logPath,
 	}
