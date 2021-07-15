@@ -9,6 +9,8 @@ import (
 	"github.com/fatih/color"
 )
 
+var nowday string
+
 func (lm *msgLog) control() {
 	// format = printFileline() + format // printfileline()打印出错误的文件和行数
 	// 判断是输出控制台 还是写入文件
@@ -21,17 +23,17 @@ func (lm *msgLog) control() {
 		if everyDay {
 			// 如果每天备份的话， 文件名需要更新
 			thisDay := fmt.Sprintf("%d-%d-%d", lm.create.Year(), lm.create.Month(), lm.create.Day())
-			if lm.now == "" {
-				lm.now = thisDay
+			if nowday == "" {
+				nowday = thisDay
 			}
-			if thisDay != lm.now {
+			if thisDay != nowday {
 				// 重命名
-				if err := os.Rename(lm.logPath, filepath.Join(lm.path, lm.now+"_"+lm.name)); err != nil {
+				if err := os.Rename(lm.logPath, filepath.Join(lm.path, nowday+"_"+lm.name)); err != nil {
 					fmt.Println(err)
 					lm.out = true
 					return
 				}
-				lm.now = thisDay
+				nowday = thisDay
 			}
 
 		}
@@ -55,9 +57,7 @@ func (lm *msgLog) control() {
 
 func (lm *msgLog) writeToFile() {
 	//
-	//if _, ok := logName[name]; !ok {
 	//不存在就新建
-	fmt.Println("------" + lm.logPath + "----")
 	f, err := os.OpenFile(lm.logPath, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
 	if err != nil {
 		// 如果失败，切换到控制台输出

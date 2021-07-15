@@ -22,7 +22,6 @@ type msgLog struct {
 	out     bool              // 文件还是控制台
 	path    string
 	name    string
-	now     string
 }
 
 var cache chan msgLog

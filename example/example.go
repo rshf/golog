@@ -15,7 +15,7 @@ func main() {
 	defer golog.Sync()
 	// golog.InitLogger("log", 0, true, 1)
 	for {
-		// golog.NewLog("log/test.log", 0, true, 1).Info("aaaaa")
+		golog.InitLogger("log/test.log", 0, true)
 		golog.Level = golog.DEBUG
 		debugColor := make([]color.Attribute, 0)
 		debugColor = append(debugColor, color.FgBlue) // 前景色为蓝色
@@ -30,7 +30,6 @@ func main() {
 		aaa()
 		golog.Info("me")
 		time.Sleep(1 * time.Second)
-		golog.Fatal("111")
 	}
 
 }

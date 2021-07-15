@@ -1,6 +1,7 @@
 package golog
 
 import (
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -55,6 +56,9 @@ func TestNewLog(t *testing.T) {
 }
 
 func TestFilePath(t *testing.T) {
+	x := filepath.Join("log", "bb.log")
+	t.Log(x)
+	os.Rename("log\\aaaa.log", x)
 	t.Log(filepath.Dir(""))
 	t.Log(filepath.Base(""))
 }
