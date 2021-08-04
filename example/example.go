@@ -15,9 +15,22 @@ func main() {
 	defer golog.Sync()
 	// golog.InitLogger("log", 0, true, 1)
 	for {
-		golog.InitLogger("log/test.log", 0, true)
-		golog.Level = golog.DEBUG
+		golog.InitLogger("", 0, true)
 		debugColor := make([]color.Attribute, 0)
+		debugColor = append(debugColor, color.FgBlue) // 前景色为蓝色
+		golog.SetColor(golog.DEBUG, debugColor)       // 设置debug级别的日志颜色
+		golog.Infof("adf%s", "cander")
+		golog.Debug("debug wo和 ")
+		golog.Level = golog.TRACE
+		golog.Error("wo和 ")
+		golog.Trace("7777")
+		l1 := golog.NewLog("", 1, false)
+		for i := 0; i < 100; i++ {
+			l1.AddLabel("mmm", "bbb")
+			l1.Errorf("1111111111111111111111111---%d", i)
+		}
+
+		golog.Level = golog.DEBUG
 		debugColor = append(debugColor, color.FgBlue) // 前景色为蓝色
 		golog.SetColor(golog.DEBUG, debugColor)       // 设置debug级别的日志颜色
 		golog.Infof("adf%s", "cander")

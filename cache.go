@@ -22,13 +22,14 @@ type msgLog struct {
 	out     bool              // 文件还是控制台
 	path    string
 	name    string
+	size    int64 // 文件大小
 }
 
 var cache chan msgLog
 var exit chan bool
 
 func init() {
-	cache = make(chan msgLog, 1000)
+	cache = make(chan msgLog, 10000)
 	exit = make(chan bool)
 	go write()
 

@@ -52,10 +52,9 @@ func NewLog(path string, size int64, everyday bool, ct ...time.Duration) *Label 
 		expire = ct[0]
 	}
 	l := &Label{
-		Label: make(map[string]string),
-		Mu:    &sync.RWMutex{},
-		Path:  path,
-
+		Label:    make(map[string]string),
+		Mu:       &sync.RWMutex{},
+		Path:     path,
 		Size:     size,
 		EveryDay: everyday,
 		Expire:   expire,
@@ -92,6 +91,12 @@ func (l *Label) Trace(msg ...interface{}) {
 }
 
 // open file，  所有日志默认前面加了时间，
+func (l *Label) Tracef(format string, msg ...interface{}) {
+	// Access,
+	l.Trace(fmt.Sprintf(format, msg...))
+}
+
+// open file，  所有日志默认前面加了时间，
 func (l *Label) Debug(msg ...interface{}) {
 	// debug,
 	if Level <= DEBUG {
@@ -100,10 +105,20 @@ func (l *Label) Debug(msg ...interface{}) {
 }
 
 // open file，  所有日志默认前面加了时间，
+func (l *Label) Debugf(format string, msg ...interface{}) {
+	// Access,
+	l.Debug(fmt.Sprintf(format, msg...))
+}
+
+// open file，  所有日志默认前面加了时间，
 func (l *Label) Info(msg ...interface{}) {
 	if Level <= INFO {
 		l.s(INFO, arrToString(msg...))
 	}
+}
+func (l *Label) Infof(format string, msg ...interface{}) {
+	// Access,
+	l.Info(fmt.Sprintf(format, msg...))
 }
 
 // 可以根据下面格式一样，在format 后加上更详细的输出值
@@ -114,12 +129,22 @@ func (l *Label) Warn(msg ...interface{}) {
 	}
 }
 
+func (l *Label) Warnf(format string, msg ...interface{}) {
+	// Access,
+	l.Warn(fmt.Sprintf(format, msg...))
+}
+
 // 可以根据下面格式一样，在format 后加上更详细的输出值
 func (l *Label) Error(msg ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= ERROR {
 		l.s(ERROR, arrToString(msg...))
 	}
+}
+
+func (l *Label) Errorf(format string, msg ...interface{}) {
+	// Access,
+	l.Error(fmt.Sprintf(format, msg...))
 }
 
 func (l *Label) Fatal(msg ...interface{}) {
@@ -129,6 +154,11 @@ func (l *Label) Fatal(msg ...interface{}) {
 	}
 	Sync()
 	os.Exit(1)
+}
+
+func (l *Label) Fatalf(format string, msg ...interface{}) {
+	// Access,
+	l.Fatal(fmt.Sprintf(format, msg...))
 }
 
 func (l *Label) UpFunc(deep int, msg ...interface{}) {
@@ -157,5 +187,6 @@ func (l *Label) s(level level, msg string, deep ...int) {
 		path:    l.Dir,
 		logPath: l.LogPath,
 		name:    l.Name,
+		size:    l.Size,
 	}
 }

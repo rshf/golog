@@ -2,6 +2,7 @@ package golog
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -29,7 +30,7 @@ func (lm *msgLog) control() {
 			if thisDay != nowday {
 				// 重命名
 				if err := os.Rename(lm.logPath, filepath.Join(lm.path, nowday+"_"+lm.name)); err != nil {
-					fmt.Println(err)
+					log.Println(err)
 					lm.out = true
 					return
 				}
@@ -37,15 +38,17 @@ func (lm *msgLog) control() {
 			}
 
 		}
-		if fileSize > 0 {
+		if lm.size > 0 {
 			f, err := os.Open(lm.logPath)
 			if err == nil {
 				// 如果大于设定值， 那么
 				fi, err := f.Stat()
-				if err == nil && fi.Size() >= fileSize*1024 {
-					os.Rename(lm.name, fmt.Sprintf("%d_%s", lm.create.Unix(), lm.name))
+				if err == nil && fi.Size() >= lm.size*1024 {
+					f.Close()
+					err = os.Rename(lm.logPath, filepath.Join(lm.path, fmt.Sprintf("%d_%s", lm.create.Unix(), lm.name)))
+					log.Println(err)
 				}
-				defer f.Close()
+
 			}
 
 		}

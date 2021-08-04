@@ -175,6 +175,7 @@ func s(level level, msg string, deep ...int) {
 		out:     logPath == "." || logPath == "",
 		path:    dir,
 		logPath: logPath,
+		size:    fileSize,
 	}
 
 }
