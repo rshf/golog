@@ -4,6 +4,11 @@
  go get github.com/hyahm/golog
 ```
 
+> 默认的输出格式
+
+`{{ .Ctime }} - [{{ .Level }}]{{ if .Label }} - {{ range $k,$v := .Label}}[{{$k}}:{{$v}}]{{end}}{{end}} - {{.Hostname}} - {{.Line}} - {{.Msg}}`
+
+
 ### 使用
 > 在main 函数开始直接调用InitLogger方法  
 ```go

@@ -19,7 +19,7 @@ var (
 
 // 文件名
 var name string
-var Format string = "{{ .Ctime }} - [{{ .Level }}]{{ if .Label }} - {{ range $k,$v := .Label}}[{{$k}}:{{$v}}]{{end}}{{end}}{{ if .Prev}} - {{.Prev}} - {{end}} - {{.Hostname}} - {{.Line}} - {{.Msg}}"
+var Format string = "{{ .Ctime }} - [{{ .Level }}]{{ if .Label }} - {{ range $k,$v := .Label}}[{{$k}}:{{$v}}]{{end}}{{end}} - {{.Hostname}} - {{.Line}} - {{.Msg}}"
 var label map[string]string
 var labelLock sync.RWMutex
 

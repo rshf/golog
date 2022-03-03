@@ -76,11 +76,24 @@ func (l *Log) AddLabel(key, value string) *Log {
 	return l
 }
 
+func (l *Log) SetLabel(key, value string) *Log {
+	l.Mu.Lock()
+	defer l.Mu.Unlock()
+	l.Label[key] = value
+	return l
+}
+
 func (l *Log) DelLabel(key string) *Log {
 	l.Mu.RLock()
 	defer l.Mu.RUnlock()
 	delete(l.Label, key)
 	return l
+}
+
+func (l *Log) GetLabel() map[string]string {
+	l.Mu.Lock()
+	defer l.Mu.Unlock()
+	return l.Label
 }
 
 // open file，  所有日志默认前面加了时间，
@@ -173,16 +186,16 @@ func (l *Log) s(level level, msg string, deep ...int) {
 	if len(deep) > 0 && deep[0] > 0 {
 		msg = fmt.Sprintf("caller from %s -- %v", printFileline(deep[0]), msg)
 	}
-	pre := ""
-	for k, v := range l.Label {
-		pre += fmt.Sprintf("[%s = %s]", k, v)
-	}
+	// pre := ""
+	// for k, v := range l.Label {
+	// 	pre += fmt.Sprintf("[%s = %s]", k, v)
+	// }
 	if l.Format == "" {
 		l.Format = Format
 	}
 	now := time.Now()
 	cache <- msgLog{
-		Prev:    pre,
+		// Prev:    pre,
 		Msg:     msg,
 		Level:   level,
 		create:  now,
@@ -195,5 +208,6 @@ func (l *Log) s(level level, msg string, deep ...int) {
 		name:    l.Name,
 		size:    l.Size,
 		format:  l.Format,
+		Label:   l.GetLabel(),
 	}
 }

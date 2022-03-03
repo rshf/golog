@@ -12,11 +12,11 @@ import (
 
 type msgLog struct {
 	logPath string
-	Prev    string    // 深度对于的路径
-	Msg     string    // 日志信息
-	Level   level     // 日志级别
-	create  time.Time // 创建日志的时间
-	Ctime   string
+	// Prev    string    // 深度对于的路径
+	Msg    string    // 日志信息
+	Level  level     // 日志级别
+	create time.Time // 创建日志的时间
+	Ctime  string
 	// deep     int               // 向外的深度，  Upfunc 才会用到
 	Color    []color.Attribute // 颜色
 	Line     string            // 行号
