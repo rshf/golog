@@ -1,11 +1,13 @@
 package golog
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 	"runtime"
+	"text/template"
 
 	"github.com/fatih/color"
 )
@@ -46,9 +48,12 @@ func (lm *msgLog) control() {
 				if err == nil && fi.Size() >= lm.size*1024 {
 					f.Close()
 					err = os.Rename(lm.logPath, filepath.Join(lm.path, fmt.Sprintf("%d_%s", lm.create.Unix(), lm.name)))
-					log.Println(err)
-				}
+					if err != nil {
+						log.Println(err)
+					}
 
+				}
+				f.Close()
 			}
 
 		}
@@ -69,15 +74,39 @@ func (lm *msgLog) writeToFile() {
 		lm.printLine()
 		return
 	}
-	now := lm.create.Format("2006-01-02 15:04:05")
-	logMsg := fmt.Sprintf("%s - [%s] - %s - %s - %s - %v\n", now, lm.level, lm.prev, hostname, lm.line, lm.msg)
-	f.Write([]byte(logMsg))
-	f.Close()
+	defer f.Close()
+	buf, err := lm.formatText()
+	if err != nil {
+		return
+	}
+	// logMsg := fmt.Sprintf("%s - [%s] - %s - %s - %s - %v\n", lm.Ctime, lm.Level, lm.Prev, lm.Hostname, lm.Line, lm.Msg)
+	f.Write([]byte(buf.Bytes()))
+
 }
 
 func (lm *msgLog) printLine() {
-	now := lm.create.Format("2006-01-02 15:04:05")
-	color.New(lm.color...).Printf("%s - [%s] - %s - %s - %s - %v\n", now, lm.level, lm.prev, hostname, lm.line, lm.msg)
+	buf, err := lm.formatText()
+	if err != nil {
+		return
+	}
+	color.New(lm.Color...).Println(buf.String())
+	// color.New(lm.Color...).Printf("%s - [%s] - %s - %s - %s - %v\n", lm.Ctime, lm.Level, lm.Prev, lm.Hostname, lm.Line, lm.Msg)
+}
+
+func (lm *msgLog) formatText() (*bytes.Buffer, error) {
+	tml, err := template.New(lm.name).Parse(lm.format)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	var b []byte
+	buf := bytes.NewBuffer(b)
+	err = tml.Execute(buf, lm)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	return buf, nil
 }
 
 func printFileline(c int) string {

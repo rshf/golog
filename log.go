@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -18,12 +19,41 @@ var (
 
 // 文件名
 var name string
+var Format string = "{{ .Ctime }} - [{{ .Level }}]{{ if .Label }} - {{ range $k,$v := .Label}}[{{$k}}:{{$v}}]{{end}}{{end}}{{ if .Prev}} - {{.Prev}} - {{end}} - {{.Hostname}} - {{.Line}} - {{.Msg}}"
+var label map[string]string
+var labelLock sync.RWMutex
 
 // hostname
 var hostname = ""
 
 func init() {
 	hostname, _ = os.Hostname()
+	label = make(map[string]string)
+	labelLock = sync.RWMutex{}
+}
+
+func AddLabel(key, value string) {
+	labelLock.RLock()
+	defer labelLock.RUnlock()
+	label[key] = value
+}
+
+func SetLabel(key, value string) {
+	labelLock.RLock()
+	defer labelLock.RUnlock()
+	label[key] = value
+}
+
+func DelLabel(key string) {
+	labelLock.Lock()
+	defer labelLock.Unlock()
+	delete(label, key)
+}
+
+func GetLabel() map[string]string {
+	labelLock.RLock()
+	defer labelLock.RUnlock()
+	return label
 }
 
 func InitLogger(path string, size int64, everyday bool, ct ...time.Duration) {
@@ -165,17 +195,23 @@ func s(level level, msg string, deep ...int) {
 	if len(deep) > 0 && deep[0] > 0 {
 		msg = fmt.Sprintf("caller from %s -- %v", printFileline(deep[0]), msg)
 	}
+
+	now := time.Now()
 	cache <- msgLog{
-		msg:     msg,
-		level:   level,
-		name:    name,
-		create:  time.Now(),
-		color:   GetColor(level),
-		line:    printFileline(0),
-		out:     logPath == "." || logPath == "",
-		path:    dir,
-		logPath: logPath,
-		size:    fileSize,
+		Msg:      msg,
+		Level:    level,
+		name:     name,
+		create:   now,
+		Ctime:    now.Format("2006-01-02 15:04:05"),
+		Color:    GetColor(level),
+		Line:     printFileline(0),
+		out:      logPath == "." || logPath == "",
+		path:     dir,
+		logPath:  logPath,
+		size:     fileSize,
+		Hostname: hostname,
+		format:   Format,
+		Label:    GetLabel(),
 	}
 
 }
