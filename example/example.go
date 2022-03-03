@@ -27,9 +27,9 @@ func main() {
 	golog.Level = golog.TRACE
 	golog.Error("wo和 ")
 	golog.Trace("7777")
-	l1 := golog.NewLog("log/label.log", 1, false) // newlog 才能使用label
+	l1 := golog.NewLog("log/label.log", 0, false) // newlog 才能使用label
+	l1.AddLabel("mmm", "bbb")
 	for i := 0; i < 100; i++ {
-		l1.AddLabel("mmm", "bbb")
 		l1.Errorf("1111111111111111111111111---%d", i)
 	}
 

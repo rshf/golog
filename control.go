@@ -79,6 +79,7 @@ func (lm *msgLog) writeToFile() {
 	if err != nil {
 		return
 	}
+	buf.WriteString("\n")
 	// logMsg := fmt.Sprintf("%s - [%s] - %s - %s - %s - %v\n", lm.Ctime, lm.Level, lm.Prev, lm.Hostname, lm.Line, lm.Msg)
 	f.Write([]byte(buf.Bytes()))
 
