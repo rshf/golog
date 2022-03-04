@@ -93,7 +93,7 @@ func main() {
 }
 ```
 
-### 增加Lebel标签
+### 增加Label标签
 ```go
 package main
 
