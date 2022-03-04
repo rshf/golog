@@ -27,7 +27,7 @@ func main() {
 	// 第二个参数是设置日志切割的大小，0 表示不按照大小切割， 默认单位M，
 	//  第三个事是否每天切割，
 	// 第四个是删除多久以前的日志， 根据设置的name 来匹配， 0表示不删除
-	golog.InitLogger("log", 0, true, 1)
+	golog.InitLogger("log", 0, true, 1)  // 第一个参数需要设置日志路径， 如果没写相当于这一行没用， 而是直接输出到控制台
 	golog.Level = golog.DEBUG
 	// 新增label的支持，  通过newLog来打印带label 的 日志
 	golog.InitLogger("", 0, true)
