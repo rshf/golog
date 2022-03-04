@@ -33,7 +33,7 @@ var cache chan msgLog
 var exit chan bool
 
 func init() {
-	cache = make(chan msgLog, 10000)
+	cache = make(chan msgLog, 100000)
 	exit = make(chan bool)
 	go write()
 

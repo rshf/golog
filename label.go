@@ -46,6 +46,7 @@ func (l *Log) clean() {
 	}
 }
 
+// size: kb
 func NewLog(path string, size int64, everyday bool, ct ...time.Duration) *Log {
 	var expire time.Duration
 	path = filepath.Clean(path)

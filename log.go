@@ -56,6 +56,7 @@ func GetLabel() map[string]string {
 	return label
 }
 
+// size: kb
 func InitLogger(path string, size int64, everyday bool, ct ...time.Duration) {
 	if path == "" {
 		logPath = "."
