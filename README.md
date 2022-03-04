@@ -126,5 +126,26 @@ func main() {
 }
 ```
 
+### 接口方法调试， 可以知道是那一行调用了这个方法
+```go
+package main
+
+import (
+	"github.com/hyahm/golog"
+)
+
+func main() {
+	defer golog.Sync()
+	golog.Info("foo")
+	golog.Level = golog.DEBUG
+	test()
+	golog.Info("bar")
+}
+
+func test() {
+	// 此方法的日志级别是DEBUG， 所以调试的时候必须将日志级别设置成DEBUG，不然不会显示
+	golog.UpFunc(1, "who call me") // 2022-03-04 10:49:38 - [DEBUG] - DESKTOP-NENB5CA - C:/work/golog/example/example.go:17 - caller from C:/work/golog/example/example.go:11 -- who call me
+}
+```
 
 
