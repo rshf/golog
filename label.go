@@ -13,7 +13,6 @@ import (
 )
 
 type Log struct {
-	LogPath  string
 	Create   time.Time
 	Label    map[string]string
 	Deep     int
@@ -61,8 +60,11 @@ func NewLog(path string, size int64, everyday bool, ct ...time.Duration) *Log {
 		EveryDay: everyday,
 		Expire:   expire,
 	}
-	l.LogPath = path
 	l.Dir = filepath.Dir(path)
+	err := os.MkdirAll(l.Dir, 0755)
+	if err != nil {
+		panic(err)
+	}
 	l.Name = filepath.Base(path)
 	if l.Name != "." {
 		go l.clean()
@@ -205,7 +207,7 @@ func (l *Log) s(level level, msg string, deep ...int) {
 		Line:    printFileline(0),
 		out:     l.Name == "." || l.Name == "",
 		path:    l.Dir,
-		logPath: l.LogPath,
+		logPath: l.Path,
 		name:    l.Name,
 		size:    l.Size,
 		format:  l.Format,
