@@ -50,7 +50,7 @@ func main() {
 }
 ```
 
-### 打印日志级别
+### 按照日志级别打印
 
 ```go
 package main
