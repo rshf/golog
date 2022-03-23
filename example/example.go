@@ -6,7 +6,7 @@ import (
 
 func main() {
 	defer golog.Sync()
-	golog.Info("foo")
+	golog.Info("foo", "aaaa", "bb")
 	golog.Level = golog.DEBUG
 	test()
 	golog.Info("bar")

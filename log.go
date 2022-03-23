@@ -186,10 +186,10 @@ func UpFunc(deep int, msg ...interface{}) {
 
 func arrToString(msg ...interface{}) string {
 	ll := make([]string, 0, len(msg))
-	for range msg {
-		ll = append(ll, "%v")
+	for _, v := range msg {
+		ll = append(ll, fmt.Sprintf("%v", v))
 	}
-	return fmt.Sprintf(strings.Join(ll, ""), msg...)
+	return strings.Join(ll, " ")
 }
 
 func s(level level, msg string, deep ...int) {
