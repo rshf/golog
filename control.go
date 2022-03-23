@@ -66,7 +66,7 @@ func (lm *msgLog) control() {
 func (lm *msgLog) writeToFile() {
 	//
 	//不存在就新建
-	f, err := os.OpenFile(lm.logPath, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
+	f, err := os.OpenFile(lm.logPath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		// 如果失败，切换到控制台输出
 		color.Red("Permission denied,  auto change to Stdout")
