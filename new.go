@@ -73,8 +73,9 @@ func NewLog(path string, size int64, everyday bool, ct ...time.Duration) *Log {
 	}
 	l.Name = filepath.Base(path)
 	var ctx context.Context
-	ctx, l.cancel = context.WithCancel(context.Background())
+
 	if l.Name != "." && l.Expire > 0 {
+		ctx, l.cancel = context.WithCancel(context.Background())
 		go l.clean(ctx)
 	}
 	return l

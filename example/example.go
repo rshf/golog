@@ -1,15 +1,19 @@
 package main
 
 import (
+	"time"
+
 	"github.com/hyahm/golog"
 )
 
 func main() {
 	defer golog.Sync()
+	golog.InitLogger("", 0, false)
 	golog.Info("foo", "aaaa", "bb")
 	golog.Level = golog.DEBUG
 	test()
 	golog.Info("bar")
+	time.Sleep(10 * time.Second)
 }
 
 func test() {
