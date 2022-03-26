@@ -1,6 +1,7 @@
 package golog
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -27,19 +28,24 @@ type Log struct {
 	Name     string
 	Expire   time.Duration
 	Format   string
+	cancel   context.CancelFunc
 }
 
-func (l *Log) clean() {
+func (l *Log) clean(ctx context.Context) {
 	if name == "" || cleanTime <= 0 {
 		return
 	}
 	for {
-		time.Sleep(cleanTime)
-		fs, _ := ioutil.ReadDir(l.Dir)
-		for _, f := range fs {
-			if strings.Contains(f.Name(), l.Name) {
-				os.Remove(filepath.Join(logPath, f.Name()))
+		select {
+		case <-time.After(cleanTime):
+			fs, _ := ioutil.ReadDir(l.Dir)
+			for _, f := range fs {
+				if strings.Contains(f.Name(), l.Name) {
+					os.Remove(filepath.Join(logPath, f.Name()))
+				}
 			}
+		case <-ctx.Done():
+			return
 		}
 
 	}
@@ -66,10 +72,18 @@ func NewLog(path string, size int64, everyday bool, ct ...time.Duration) *Log {
 		panic(err)
 	}
 	l.Name = filepath.Base(path)
+	var ctx context.Context
+	ctx, l.cancel = context.WithCancel(context.Background())
 	if l.Name != "." {
-		go l.clean()
+		go l.clean(ctx)
 	}
 	return l
+}
+
+// 关闭log
+func (l *Log) Close() {
+	l.cancel()
+	l = nil
 }
 
 func (l *Log) AddLabel(key, value string) *Log {
