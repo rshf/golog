@@ -1,6 +1,7 @@
 package golog
 
 import (
+	"context"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -39,17 +40,21 @@ func init() {
 
 }
 
-func clean(dir, name string) {
-	if name == "" || cleanTime <= 0 {
-		return
-	}
+func clean(ctx context.Context, dir, name string) {
 	for {
-		time.Sleep(cleanTime)
-		fs, _ := ioutil.ReadDir(dir)
-		for _, f := range fs {
-			if strings.Contains(f.Name(), name) {
-				os.Remove(filepath.Join(logPath, f.Name()))
+		select {
+		case <-time.After(cleanTime):
+			fs, err := ioutil.ReadDir(dir)
+			if err != nil {
+				continue
 			}
+			for _, f := range fs {
+				if strings.Contains(f.Name(), name) {
+					os.Remove(filepath.Join(logPath, f.Name()))
+				}
+			}
+		case <-ctx.Done():
+			return
 		}
 
 	}

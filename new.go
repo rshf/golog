@@ -32,13 +32,13 @@ type Log struct {
 }
 
 func (l *Log) clean(ctx context.Context) {
-	if name == "" || cleanTime <= 0 {
-		return
-	}
 	for {
 		select {
 		case <-time.After(cleanTime):
-			fs, _ := ioutil.ReadDir(l.Dir)
+			fs, err := ioutil.ReadDir(l.Dir)
+			if err != nil {
+				continue
+			}
 			for _, f := range fs {
 				if strings.Contains(f.Name(), l.Name) {
 					os.Remove(filepath.Join(logPath, f.Name()))
@@ -74,7 +74,7 @@ func NewLog(path string, size int64, everyday bool, ct ...time.Duration) *Log {
 	l.Name = filepath.Base(path)
 	var ctx context.Context
 	ctx, l.cancel = context.WithCancel(context.Background())
-	if l.Name != "." {
+	if l.Name != "." && l.Expire > 0 {
 		go l.clean(ctx)
 	}
 	return l

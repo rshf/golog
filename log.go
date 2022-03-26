@@ -1,6 +1,7 @@
 package golog
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -25,11 +26,49 @@ var labelLock sync.RWMutex
 
 // hostname
 var hostname = ""
+var cancel context.CancelFunc
 
 func init() {
 	hostname, _ = os.Hostname()
 	label = make(map[string]string)
 	labelLock = sync.RWMutex{}
+}
+
+// size: kb
+func InitLogger(path string, size int64, everyday bool, ct ...time.Duration) {
+	if path == "" {
+		logPath = "."
+		return
+	}
+	name = filepath.Base(path)
+	dir = filepath.Dir(path)
+	logPath = filepath.Clean(path)
+
+	err := os.MkdirAll(dir, 0755)
+	if err != nil {
+		panic(err)
+	}
+	fileSize = size
+	everyDay = everyday
+	if len(ct) > 0 {
+		cleanTime = ct[0]
+	}
+	var ctx context.Context
+
+	if logPath != "." && cleanTime > 0 {
+		ctx, cancel = context.WithCancel(context.Background())
+		go clean(ctx, dir, name)
+	}
+
+}
+
+func Close() {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("No need to close")
+		}
+	}()
+	cancel()
 }
 
 func AddLabel(key, value string) {
@@ -54,28 +93,6 @@ func GetLabel() map[string]string {
 	labelLock.RLock()
 	defer labelLock.RUnlock()
 	return label
-}
-
-// size: kb
-func InitLogger(path string, size int64, everyday bool, ct ...time.Duration) {
-	if path == "" {
-		logPath = "."
-		return
-	}
-	name = filepath.Base(path)
-	dir = filepath.Dir(path)
-	logPath = filepath.Clean(path)
-
-	err := os.MkdirAll(dir, 0755)
-	if err != nil {
-		panic(err)
-	}
-	fileSize = size
-	everyDay = everyday
-	if len(ct) > 0 {
-		cleanTime = ct[0]
-	}
-	go clean(dir, name)
 }
 
 // open file，  所有日志默认前面加了时间，
