@@ -82,6 +82,11 @@ func NewLog(path string, size int64, everyday bool, ct ...time.Duration) *Log {
 
 // 关闭log
 func (l *Log) Close() {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("Not need be close")
+		}
+	}()
 	l.cancel()
 	l = nil
 }

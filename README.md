@@ -183,8 +183,55 @@ func main() {
 	logger2 := golog.NewLog("log/test2.log", 0, false) // 这是操作log/test2.log的实例， 用法与golog的方法使用一致
 	logger1.Info("foo")
 	logger2.Info("foo")
+	// 如果这些日志实例在服务器运行中可能会停止，则必须在此日志服务停止时必须关闭
 }
 ```
+### 多文件操作关闭
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/hyahm/golog"
+)
+
+func main() {
+	ch := make(chan os.Signal, 1)
+	go func() {
+		log1 := golog.NewLog("aaa.log", 0, false)
+		for {
+			time.Sleep(time.Second)
+			log1.Info("for")
+		}
+		// 这里可以不关闭
+	}()
+
+	go func() {
+		log2 := golog.NewLog("aaa.log", 0, false)
+		for {
+			time.Sleep(time.Second)
+			log2.Info("for")
+			break
+		}
+		// 这里必须关闭
+		log2.Close()
+	}()
+	signal.Notify(ch, syscall.SIGHUP, syscall.SIGINT)
+	select {
+	case <-ch:
+		fmt.Println("exit")
+	}
+}
+
+```
+
+
 
 ### 接口方法调试， 可以知道是那一行调用了这个方法
 ```go
