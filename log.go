@@ -11,10 +11,10 @@ import (
 )
 
 var (
-	logPath   string        // 文件路径
-	fileSize  int64         // 切割的文件大小
-	everyDay  bool          // 每天一个来切割文件 （这个比上面个优先级高）
-	cleanTime time.Duration = 0
+	logPath   string // 文件路径
+	fileSize  int64  // 切割的文件大小
+	everyDay  bool   // 每天一个来切割文件 （这个比上面个优先级高）
+	cleanTime int    = 0
 	dir       string
 )
 
@@ -35,7 +35,7 @@ func init() {
 }
 
 // size: kb
-func InitLogger(path string, size int64, everyday bool, ct ...time.Duration) {
+func InitLogger(path string, size int64, everyday bool, ct ...int) {
 	if path == "" {
 		logPath = "."
 		return

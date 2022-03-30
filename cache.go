@@ -43,7 +43,7 @@ func init() {
 func clean(ctx context.Context, dir, name string) {
 	for {
 		select {
-		case <-time.After(cleanTime):
+		case <-time.After(time.Duration(cleanTime) * time.Hour * 24):
 			fs, err := ioutil.ReadDir(dir)
 			if err != nil {
 				continue

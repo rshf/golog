@@ -34,7 +34,7 @@ type Log struct {
 func (l *Log) clean(ctx context.Context) {
 	for {
 		select {
-		case <-time.After(cleanTime):
+		case <-time.After(time.Duration(cleanTime) * time.Hour * 24):
 			fs, err := ioutil.ReadDir(l.Dir)
 			if err != nil {
 				continue
