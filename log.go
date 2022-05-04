@@ -149,7 +149,7 @@ func UpFuncf(deep int, format string, args ...interface{}) {
 func Trace(msg ...interface{}) {
 	// Access,
 	if Level <= TRACE {
-		s(TRACE, arrToString(msg...))
+		s(TRACE, arrToString(msg...)+"\n")
 	}
 }
 
@@ -157,14 +157,14 @@ func Trace(msg ...interface{}) {
 func Debug(msg ...interface{}) {
 	// debug,
 	if Level <= DEBUG {
-		s(DEBUG, arrToString(msg...))
+		s(DEBUG, arrToString(msg...)+"\n")
 	}
 }
 
 // open file，  所有日志默认前面加了时间，
 func Info(msg ...interface{}) {
 	if Level <= INFO {
-		s(INFO, arrToString(msg...))
+		s(INFO, arrToString(msg...)+"\n")
 	}
 }
 
@@ -172,7 +172,7 @@ func Info(msg ...interface{}) {
 func Warn(msg ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= WARN {
-		s(WARN, arrToString(msg...))
+		s(WARN, arrToString(msg...)+"\n")
 	}
 }
 
@@ -180,14 +180,14 @@ func Warn(msg ...interface{}) {
 func Error(msg ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= ERROR {
-		s(ERROR, arrToString(msg...))
+		s(ERROR, arrToString(msg...)+"\n")
 	}
 }
 
 func Fatal(msg ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= FATAL {
-		s(FATAL, arrToString(msg...))
+		s(FATAL, arrToString(msg...)+"\n")
 	}
 	Sync()
 	os.Exit(1)
@@ -196,7 +196,7 @@ func Fatal(msg ...interface{}) {
 func UpFunc(deep int, msg ...interface{}) {
 	// deep打印函数的深度， 相对于当前位置向外的深度
 	if Level <= DEBUG {
-		s(DEBUG, arrToString(msg...), deep)
+		s(DEBUG, arrToString(msg...)+"\n", deep)
 	}
 }
 

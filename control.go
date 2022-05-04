@@ -79,7 +79,7 @@ func (lm *msgLog) writeToFile() {
 	if err != nil {
 		return
 	}
-	buf.WriteString("\n")
+	// buf.WriteString("\n")
 	// logMsg := fmt.Sprintf("%s - [%s] - %s - %s - %s - %v\n", lm.Ctime, lm.Level, lm.Prev, lm.Hostname, lm.Line, lm.Msg)
 	f.Write([]byte(buf.Bytes()))
 
@@ -90,7 +90,7 @@ func (lm *msgLog) printLine() {
 	if err != nil {
 		return
 	}
-	color.New(lm.Color...).Println(buf.String())
+	color.New(lm.Color...).Print(buf.String())
 	// color.New(lm.Color...).Printf("%s - [%s] - %s - %s - %s - %v\n", lm.Ctime, lm.Level, lm.Prev, lm.Hostname, lm.Line, lm.Msg)
 }
 

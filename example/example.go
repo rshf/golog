@@ -3,17 +3,20 @@ package main
 import (
 	"time"
 
+	"github.com/fatih/color"
 	"github.com/hyahm/golog"
 )
 
 func main() {
 	defer golog.Sync()
-	golog.InitLogger("", 0, false)
-	golog.Info("foo", "aaaa", "bb")
+	a := golog.NewLog("", 0, false, 10*time.Second)
+	a.Info("foo", "aaaa", "bb")
+	a.Info(color.New(color.BgYellow).Sprint("aaaa"), color.New(color.BgBlue).Sprint("bbbb"))
 	golog.Level = golog.DEBUG
 	test()
 	golog.Info("bar")
 	time.Sleep(10 * time.Second)
+
 }
 
 func test() {

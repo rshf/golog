@@ -53,7 +53,7 @@ func (l *Log) clean(ctx context.Context) {
 
 // size: kb
 func NewLog(path string, size int64, everyday bool, ct ...time.Duration) *Log {
-	var expire time.Duration
+	var expire time.Duration = 0
 	path = filepath.Clean(path)
 	if len(ct) > 0 {
 		expire = ct[0]
@@ -75,6 +75,7 @@ func NewLog(path string, size int64, everyday bool, ct ...time.Duration) *Log {
 	var ctx context.Context
 
 	if l.Name != "." && l.Expire > 0 {
+		os.OpenFile("cccc", os.O_CREATE, 0744)
 		ctx, l.cancel = context.WithCancel(context.Background())
 		go l.clean(ctx)
 	}
@@ -137,57 +138,65 @@ func (l *Log) Tracef(format string, msg ...interface{}) {
 func (l *Log) Debug(msg ...interface{}) {
 	// debug,
 	if Level <= DEBUG {
-		l.s(DEBUG, arrToString(msg...))
+		l.s(DEBUG, arrToString(msg...)+"\n")
 	}
 }
 
 // open file，  所有日志默认前面加了时间，
 func (l *Log) Debugf(format string, msg ...interface{}) {
 	// Access,
-	l.Debug(fmt.Sprintf(format, msg...))
+	if Level <= DEBUG {
+		l.s(DEBUG, arrToString(msg...))
+	}
 }
 
 // open file，  所有日志默认前面加了时间，
 func (l *Log) Info(msg ...interface{}) {
 	if Level <= INFO {
-		l.s(INFO, arrToString(msg...))
+		l.s(INFO, arrToString(msg...)+"\n")
 	}
 }
 func (l *Log) Infof(format string, msg ...interface{}) {
 	// Access,
-	l.Info(fmt.Sprintf(format, msg...))
+	if Level <= INFO {
+		l.s(INFO, arrToString(msg...))
+	}
 }
 
 // 可以根据下面格式一样，在format 后加上更详细的输出值
 func (l *Log) Warn(msg ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= WARN {
-		l.s(WARN, arrToString(msg...))
+		l.s(WARN, arrToString(msg...)+"\n")
 	}
 }
 
 func (l *Log) Warnf(format string, msg ...interface{}) {
 	// Access,
-	l.Warn(fmt.Sprintf(format, msg...))
+	if Level <= WARN {
+		l.s(WARN, arrToString(msg...))
+	}
 }
 
 // 可以根据下面格式一样，在format 后加上更详细的输出值
 func (l *Log) Error(msg ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= ERROR {
-		l.s(ERROR, arrToString(msg...))
+		l.s(ERROR, arrToString(msg...)+"\n")
 	}
 }
 
 func (l *Log) Errorf(format string, msg ...interface{}) {
 	// Access,
-	l.Error(fmt.Sprintf(format, msg...))
+	if Level <= ERROR {
+		l.s(ERROR, arrToString(msg...))
+	}
 }
 
 func (l *Log) Fatal(msg ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= FATAL {
-		l.s(FATAL, arrToString(msg...))
+		l.s(FATAL, arrToString(msg...)+"\n")
 	}
 	Sync()
 	os.Exit(1)
@@ -195,13 +204,15 @@ func (l *Log) Fatal(msg ...interface{}) {
 
 func (l *Log) Fatalf(format string, msg ...interface{}) {
 	// Access,
-	l.Fatal(fmt.Sprintf(format, msg...))
+	if Level <= FATAL {
+		l.s(FATAL, arrToString(msg...))
+	}
 }
 
 func (l *Log) UpFunc(deep int, msg ...interface{}) {
 	// deep打印函数的深度， 相对于当前位置向外的深度
 	if Level <= DEBUG {
-		l.s(DEBUG, arrToString(msg...), deep)
+		l.s(DEBUG, arrToString(msg...)+"\n", deep)
 	}
 }
 

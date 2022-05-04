@@ -20,6 +20,7 @@ func init() {
 	}
 	SetColor(ERROR, []color.Attribute{color.FgRed})
 	SetColor(WARN, []color.Attribute{color.FgYellow})
+	SetColor(DEBUG, []color.Attribute{color.FgGreen})
 }
 
 // 设置某级别的颜色
