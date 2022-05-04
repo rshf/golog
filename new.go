@@ -26,7 +26,7 @@ type Log struct {
 	Size     int64
 	EveryDay bool
 	Name     string
-	Expire   time.Duration
+	Expire   int
 	Format   string
 	cancel   context.CancelFunc
 }
@@ -34,7 +34,7 @@ type Log struct {
 func (l *Log) clean(ctx context.Context) {
 	for {
 		select {
-		case <-time.After(cleanTime):
+		case <-time.After(time.Duration(l.Expire) * time.Hour * 24):
 			fs, err := ioutil.ReadDir(l.Dir)
 			if err != nil {
 				continue
@@ -52,8 +52,8 @@ func (l *Log) clean(ctx context.Context) {
 }
 
 // size: kb
-func NewLog(path string, size int64, everyday bool, ct ...time.Duration) *Log {
-	var expire time.Duration = 0
+func NewLog(path string, size int64, everyday bool, ct ...int) *Log {
+	var expire int
 	path = filepath.Clean(path)
 	if len(ct) > 0 {
 		expire = ct[0]
