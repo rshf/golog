@@ -40,8 +40,8 @@ import (
 
 func main() {
 	defer golog.Sync()
-	// 虽然是可视化输出， 但是不需要增加\n换行
-	golog.Infof("adf%s", "cander") // stdout: 2022-03-04 10:19:31 - [INFO] - DESKTOP-NENB5CA - C:/work/golog/example/example.go:11 - adfcander
+	// 虽然是可视化输出，
+	golog.Infof("adf%s\n", "cander") // stdout: 2022-03-04 10:19:31 - [INFO] - DESKTOP-NENB5CA - C:/work/golog/example/example.go:11 - adfcander
 	// 默认的日志级别是info， 所以debug级别不会打印出来,
 	golog.Debug("foo") // stdout: nothing
 	// 通过 golog.Level = golog.DEBUG 可以设置级别为DEBUG
