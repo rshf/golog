@@ -136,6 +136,8 @@ func Fatalf(format string, args ...interface{}) {
 	if Level <= FATAL {
 		s(FATAL, fmt.Sprintf(format, args...))
 	}
+	Sync()
+	os.Exit(1)
 }
 
 func UpFuncf(deep int, format string, args ...interface{}) {
