@@ -1,4 +1,4 @@
-module github.com/hyahm/golog
+module github.com/rshf/golog
 
 go 1.17
 
