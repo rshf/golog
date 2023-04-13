@@ -102,6 +102,13 @@ func Tracef(format string, args ...interface{}) {
 }
 
 // open file，  所有日志默认前面加了时间，
+func Traceln(format string, args ...interface{}) {
+	if Level <= TRACE {
+		s(TRACE, fmt.Sprintf(format+"\n", args...))
+	}
+}
+
+// open file，  所有日志默认前面加了时间，
 func Debugf(format string, args ...interface{}) {
 	if Level <= DEBUG {
 		s(DEBUG, fmt.Sprintf(format, args...))
@@ -109,9 +116,23 @@ func Debugf(format string, args ...interface{}) {
 }
 
 // open file，  所有日志默认前面加了时间，
+func Debugln(format string, args ...interface{}) {
+	if Level <= DEBUG {
+		s(DEBUG, fmt.Sprintf(format+"\n", args...))
+	}
+}
+
+// open file，  所有日志默认前面加了时间，
 func Infof(format string, args ...interface{}) {
 	if Level <= INFO {
 		s(INFO, fmt.Sprintf(format, args...))
+	}
+}
+
+// open file，  所有日志默认前面加了时间，
+func Infoln(format string, args ...interface{}) {
+	if Level <= INFO {
+		s(INFO, fmt.Sprintf(format+"\n", args...))
 	}
 }
 
@@ -124,6 +145,14 @@ func Warnf(format string, args ...interface{}) {
 }
 
 // 可以根据下面格式一样，在format 后加上更详细的输出值
+func Warnln(format string, args ...interface{}) {
+	// error日志，添加了错误函数，
+	if Level <= WARN {
+		s(WARN, fmt.Sprintf(format+"\n", args...))
+	}
+}
+
+// 可以根据下面格式一样，在format 后加上更详细的输出值
 func Errorf(format string, args ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= ERROR {
@@ -131,10 +160,27 @@ func Errorf(format string, args ...interface{}) {
 	}
 }
 
+// 可以根据下面格式一样，在format 后加上更详细的输出值
+func Errorln(format string, args ...interface{}) {
+	// error日志，添加了错误函数，
+	if Level <= ERROR {
+		s(ERROR, fmt.Sprintf(format+"\n", args...))
+	}
+}
+
 func Fatalf(format string, args ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= FATAL {
 		s(FATAL, fmt.Sprintf(format, args...))
+	}
+	Sync()
+	os.Exit(1)
+}
+
+func Fatalln(format string, args ...interface{}) {
+	// error日志，添加了错误函数，
+	if Level <= FATAL {
+		s(FATAL, fmt.Sprintf(format+"\n", args...))
 	}
 	Sync()
 	os.Exit(1)
