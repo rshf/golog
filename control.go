@@ -117,5 +117,17 @@ func printFileline(c int) string {
 		file = "???"
 		line = 0
 	}
-	return fmt.Sprintf("%s:%d", file, line)
+	return fmt.Sprintf("%s:%d", shortFilePath(file), line)
+}
+
+func shortFilePath(file string, maxDept int) string {
+	pathSeparator := "/"
+
+	pathItemCount := strings.Count(file, pathSeparator)
+	if pathItemCount <= maxDept {
+		return file
+	} else {
+		pathItem := strings.Split(file, pathSeparator)
+		return strings.Join(pathItem[len(pathItem)-maxDept:len(pathItem)], pathSeparator)
+	}
 }
