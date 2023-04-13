@@ -118,7 +118,7 @@ func printFileline(c int) string {
 		file = "???"
 		line = 0
 	}
-	return fmt.Sprintf("%s:%d", shortFilePath(file), line)
+	return fmt.Sprintf("%s:%d", shortFilePath(file, 4), line)
 }
 
 func shortFilePath(file string, maxDept int) string {
